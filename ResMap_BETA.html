@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ResMap</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./img/tab_icon.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" -->
+    <!-- integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css"
+    type="text/css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+
+<body>
+
+  <main class="" role="main">
+    <div id="map"><div id="popup"></div>
+  </main>
+  
+
+  
+  <div class="boxMenu absolutePosition">
+
+    <img class="py-2 center" src="./img/ResMap_logo.svg" >
+    <!-- <p class="text-center mb-3">Interface web permettant la visualisation des résultats d'un calcul de réseau 2D issu de LTOP</p> -->
+
+    <div class="mt-2 greyBackground border border-dark p-1">
+      <h5 class="mx-2">Import du fichier .PRNx</h5>
+      <input class="mx-2 my-1 pr-2 inputFile" type="file" id="inputfile" accept=".prnx"></input>
+      <p class="mx-2 my-1 importInfo" id="outputTest"> </p>
+    </div>
+
+    <button class ="accordion mt-2 py-1" id="coucheButton">Menu</button>
+    <div class="panel scroller">
+      
+      <div class="mt-2">
+        <button class="accordion py-1">Points</button>
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxPointsFixes" onchange="changeLayerVisibilityFixedPoints()" checked>
+            <label class="checkboxLabel" for="checkboxPointsFixes">
+              Points fixes
+            </label>
+          </div>
+          <div class="NoPtsDecalage">
+            <input class="form-check-input NoPtsCheckbox" type="checkbox" id="checkboxPointsFixesNo" onchange="changeLayerVisibilityTextFixedPoints()" checked>
+            <label class="checkboxLabel NoPtsTxt" for="checkboxPointsFixesNo">
+              N° points fixes
+            </label>
+          </div>
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxPointsNouv" onchange="changeLayerVisibilityVariablePoints()" checked>
+            <label class="checkboxLabel" for="checkboxPointsNouv">
+              Points nouveaux
+            </label>
+          </div>
+          <div class="NoPtsDecalage">
+            <input class="form-check-input NoPtsCheckbox" type="checkbox" id="checkboxPointsVariableNo" onchange="changeLayerVisibilityTextVariablePoints()" checked>
+            <label class="checkboxLabel NoPtsTxt" for="checkboxPointsVariableNo">
+              N° points nouveaux
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="mt-2">
+        <button class="accordion py-1">Observations terrestres</button>
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxDirections" onchange="changeLayerVisibilityDirections()" checked>
+            <label class="checkboxLabel" for="checkboxDirections" id="legendeDir">
+              Directions
+            </label>
+          </div>
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxDistances" onchange="changeLayerVisibilityDistances()" checked>
+            <label class="checkboxLabel" for="checkboxDistances" id="legendeDist">
+              Distances
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="mt-2">
+        <button class="accordion py-1">Observations de coordonnées</button>
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxCoordE" onchange="changeLayerVisibilityCoordE()" >
+            <label class="checkboxLabel" for="checkboxCoordE">
+              E / Y
+            </label>
+          </div>
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxCoordN" onchange="changeLayerVisibilityCoordN()" >
+            <label class="checkboxLabel" for="checkboxCoordN">
+              N / X
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="mt-2">
+        <button class="accordion py-1" clicked>Sessions GNSS</button>
+    
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxGnss" onchange="changeLayerVisibilityGnss()">
+            <label class="checkboxLabel" for="checkboxGnss">
+              Session 1,2,3, etc.
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="mt-2">
+        <button class="accordion py-1">Indicateurs de précisions</button>
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxEllipses" onchange="changeLayerVisibilityEllipses()">
+            <label class="checkboxLabel" for="checkboxEllipses">
+              Ellipses de confiance
+            </label>
+            <div>
+              <div class="textEchelleLegende" id="AffichageEchelleEllipse">⤷ Echelle: </div>
+            </div>
+          </div>
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxEllipsesRela" onchange="changeLayerVisibilityEllipsesRela()">
+            <label class="checkboxLabel" for="checkboxEllipsesRela" id="legendeEllRela">
+              Ellipses de confiance relatives
+            </label>
+            <div>
+              <div class="textEchelleLegende" id="AffichageEchelleEllipseRela">⤷ Echelle: </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="mt-2">
+        <button class="accordion py-1" clicked>Indicateurs de fiabilité</button>
+    
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxRectangles" onchange="changeLayerVisibilityRectangles()">
+            <label class="checkboxLabel" for="checkboxRectangles">
+              Rectanlges de fiabilité externe
+            </label>
+            <div>
+              <div class="textEchelleLegende" id="AffichageEchelleRectangles">⤷ Echelle: </div>
+            </div>
+          </div>
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxRectanglesRela" onchange="changeLayerVisibilityRectanglesRela()">
+            <label class="checkboxLabel" for="checkboxRectanglesRela" id="legendeRectRela">
+              Rectanlges de fiab. ext. relatifs
+            </label>
+            <div>
+              <div class="textEchelleLegende" id="AffichageEchelleRectanglesRela">⤷ Echelle: </div>
+            </div>
+          </div>
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxFiabLoc" onchange="changeLayerVisibilityFiabLoc()">
+            <label class="checkboxLabel" for="checkboxFiabLoc">
+              Carte des fiabilités locales (zi)
+            </label>
+            <div>
+              <div class="textEchelleLegende fontColorFiab1">――  0 - 25 %</div>
+              <div class="textEchelleLegende fontColorFiab2">――  25 - 50 %</div>
+              <div class="textEchelleLegende fontColorFiab3">――  50 - 75 %</div>
+              <div class="textEchelleLegende fontColorFiab4">――  75 - 100 %</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-2">
+        <button class="accordion py-1">Résidus normés</button>
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxResidusNormes" onchange="changeLayerVisibilityWi()">
+            <label class="checkboxLabel" for="checkboxResidusNormes" id="legendeWi">
+              Carte des résidus normés (wi)
+            </label>
+            <div>
+              <div class="textEchelleLegende fontColorFiab1" id="palierWi1">――  x - ∞</div>
+              <div class="textEchelleLegende fontColorFiab2" id="palierWi2">――  x - x</div>
+              <div class="textEchelleLegende fontColorFiab4" id="palierWi3">――  0.0 - x</div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="mt-2">
+        <button class="accordion py-1">Diff. avec coordonnées initiales</button>
+        <div class="panel">
+
+          <div>
+            <input class="form-check-input" type="checkbox" id="checkboxVect" onchange="changeLayerVisibilityVect()">
+            <label class="checkboxLabel" for="checkboxVect">
+              Vecteurs DY/DX
+            </label>
+          </div>
+          <div>
+            <div class="textEchelleLegende" id="AffichageEchelleVect">⤷ Echelle: </div>
+          </div>
+
+        </div>
+      </div>
+      
+
+
+    </div>
+
+      
+  </div>
+
+
+  <div class="slidecontainer">
+    <input type="range" min="0" max="9999" step="100" value="1000" class="slider" id="myRange">
+    <div>
+      <span class="textEchelle">Echelle des ellipses, rectangles et vecteurs → </span>
+      <span id="textEchelle" class="textEchelle"></span>
+      <span class="textEchelle">:1</span>
+      <div class="textEchelle" id="nivConfiance">Niveau de confiance des ellipses → </div>
+    </div>
+  </div>
+
+  <div class="WMSabsolutePosition">
+    <button class="accordion py-2"><img src="./img/mapWMS_MENU.png" width="50"></button>
+    <div class="panel">
+      <div>
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_CN" onchange="changeBackground()" checked>
+        <label class="form-check-label" for="cb_CN">
+          CN
+        </label>
+      </div>
+      <div>
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_img" onchange="changeBackground()">
+        <label class="form-check-label" for="cb_img">
+          ortho
+        </label>
+      </div>
+      <div>
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_relief" onchange="changeBackground()">
+        <label class="form-check-label" for="cb_relief">
+          relief
+        </label>
+      </div>
+      <div>
+      <div>
+        
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_none" onchange="changeBackground()">
+        <label class="form-check-label" for="cb_none">
+          -
+        </label>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"
+  integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA=="
+  crossorigin="anonymous"></script>
+  <!-- <script src="https://unpkg.com/elm-pep@1.0.6/dist/elm-pep.js"></script> -->
+  <script src="./js/OpenLayers_v6.4.3.js"></script>
+  <script src="./js/ParsingPointsXML.js"></script>
+  <script src="./js/ParsingViseesXML.js"></script>
+  <script src="./js/CheckboxChangeLayers.js"></script>
+  <script src="./js/CenterViewOnProject.js"></script>
+  <script src="./js/ParsingEllipsesXML.js"></script>
+  <script src="./js/ParsingEllipsesRelaXML.js"></script>
+  <script src="./js/ParsingRectanglesXML.js"></script>
+  <script src="./js/ParsingRectanglesRelaXML.js"></script>
+  <script src="./js/ParsingGnssXML.js"></script>
+  <script src="./js/ParsingObsCoordXML.js"></script>
+  <script src="./js/LocalReliability.js"></script> 
+  <script src="./js/Wi.js"></script>
+  <script src="./js/ParsingVectXML.js"></script> 
+  <script src="./js/ChangeBackground.js"></script>
+  
+  
+  <script> 
+  // ---------------  INITIALISATION DE LA MAP  ---------------
+
+  // Définition de projection MN95 
+  proj4.defs(
+    "EPSG:2056",
+    "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1"
+    + " +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs"
+  );
+  ol.proj.proj4.register(proj4);
+
+  // Fond WMTS CN à échelle dynamique
+  const carteNationale = new ol.layer.Tile({
+    source: new ol.source.TileWMS({
+      url: "https://wms.geo.admin.ch/",
+      params: {
+        layers: "ch.swisstopo.pixelkarte-farbe"
+      },
+      attributions: ["&copy; <a href=\"https://www.geo.admin.ch/fr/home.html\">WMTS CarteNationale / geo.admin.ch</a>"]
+    }),
+    opacity: 0.2
+  });
+
+  // Fond WMTS swissImage à échelle dynamique
+  const swissImage = new ol.layer.Tile({
+    source: new ol.source.TileWMS({
+      url: "https://wms.geo.admin.ch/",
+      params: {
+        layers: "ch.swisstopo.swissimage"
+      },
+      attributions: ["&copy; <a href=\"https://www.geo.admin.ch/fr/home.html\">WMTS SWISSIMAGE / geo.admin.ch</a>"]
+    }),
+    opacity: 0.5
+  });
+
+  // Fond SwissALTI3D relief multidirectionnel à échelle dynamique
+  const SwissSURFACE3D = new ol.layer.Tile({
+    source: new ol.source.TileWMS({
+      url: "https://wms.geo.admin.ch/",
+      params: {
+        layers: "ch.swisstopo.swisssurface3d-reliefschattierung-multidirektional"
+      },
+      attributions: ["&copy; <a href=\"https://www.geo.admin.ch/fr/home.html\">WMTS Relief multidir. issu de SwissSURFACE3D / geo.admin.ch</a>"]
+    }),
+    opacity: 0.5
+  });
+
+  // Projection suisse
+  const projection = new ol.proj.Projection({
+    code: "EPSG:2056",
+    units: "m"
+  });
+
+  // Vue de base (centre et zoom), avec projection
+  const view = new ol.View({
+    center: [2600000, 1200000], // par défault
+    projection,
+    zoom: 9
+  });
+  
+  // Ajout de la Map
+  const map = new ol.Map({
+    target: "map",
+    layers: [
+      carteNationale,
+    ],
+    view,
+    controls: ol.control.defaults({
+      attributionOptions: {
+        collapsible: true, // Copyright affiché 
+        visible: false
+      }
+    })
+  });
+
+
+  </script>
+
+
+  <script> 
+  // ---------------  SCRIPT PRINCIPAL  ---------------
+
+    // Compte global du nombre d'observations supprimées
+    nbObsSuppr = 0
+
+    // Ajout d'écouteur d'événement sur le "change" du open-folder
+    document.getElementById('inputfile').addEventListener('change', function() {
+
+      // Récupération du nom de fichier PRNx
+      fileName = document.getElementById('inputfile').files[0]
+
+      // Lecture du contenu du fichier PRNx et appel des fonctions de parsing et création d'entités
+      let fr = new FileReader();
+      fr.onload=function() {
+        xmlToParse = fr.result;
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(xmlToParse,"text/xml");
+        let listAllPoints = parsingPointsXML(xmlToParse);
+
+        // CHANGER ECHELLE ELLIPSES ET RECTANGLES PAR DEFAULT CI-DESSSOUS 
+        echelleEllipses = 1000.0
+
+        // Lancement des traitement pour affichages
+        parsingViseesXML(xmlToParse);
+        parsingEllipsesXML(xmlToParse);
+        parsingEllipsesRelaXML(xmlToParse);
+        parsingRectanglesXML(xmlToParse);
+        parsingRectanglesRelaXML(xmlToParse);
+        parsingGNSS(xmlToParse);
+        parsingObsCoord(xmlToParse);
+        parsingVectXML(xmlToParse);
+        map.removeLayer(directionLayer); //pour ordre d'affichage et gestion des animations
+        map.removeLayer(distanceLayer); //pour ordre d'affichage et gestion des animations
+        fiabLocale();
+        parsingViseesXML(xmlToParse);
+        normedResidualsWi();
+        map.removeLayer(directionLayer); //pour ordre d'affichage et gestion des animations
+        map.removeLayer(distanceLayer); //pour ordre d'affichage et gestion des animations
+        parsingViseesXML(xmlToParse);
+        fiabLocale();
+        map.removeLayer(directionLayer); //pour ordre d'affichage et gestion des animations
+        map.removeLayer(distanceLayer); //pour ordre d'affichage et gestion des animations
+        parsingViseesXML(xmlToParse);
+        centerViewOnProject(listAllPoints);
+        document.getElementById("outputTest").textContent = "Import effectué ✓";
+        
+      };
+      fr.readAsText(fileName);
+    });
+    
+  </script>
+
+
+  <script>
+  // ---------------  SCRIPT POUR ACCORDEON  ---------------
+    let acc = document.getElementsByClassName("accordion");
+    let i;
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        let panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        } 
+      });
+    }
+  </script>
+
+
+  <script>
+  // ---------------  SCRIPT POUR SLIDING BAR ECHELLE  ---------------
+
+    let slider = document.getElementById("myRange");
+    let output = document.getElementById("textEchelle");
+    output.innerHTML = slider.value;
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+      map.removeLayer(ellipseLayer);
+      map.removeLayer(rectangleLayer);
+      map.removeLayer(vectLayer);
+      if (xmlDoc.getElementsByTagName("relativeEllipses").length != 0){ // On retire uniquement le Layer ellipseRelaLayer si il y en a
+        map.removeLayer(ellipseRelaLayer);
+      }; 
+      if (xmlDoc.getElementsByTagName("relativeRectangles").length != 0){ // On retire uniquement le Layer rectangleRelaLayer si il y en a
+        map.removeLayer(rectangleRelaLayer);
+      };
+      echelleEllipses = parseFloat(this.value);
+      parsingEllipsesXML(xmlToParse);
+      parsingRectanglesXML(xmlToParse);
+      parsingEllipsesRelaXML(xmlToParse);
+      parsingRectanglesRelaXML(xmlToParse);
+      parsingVectXML(xmlToParse);
+    }
+
+  </script>
+
+  <script src="./js/PopUpCoords.js"></script>
+  <script src="./js/Export.js"></script>
+
+
+  
+
+
+
+</body>
+
+
+
