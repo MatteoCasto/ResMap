@@ -1,0 +1,292 @@
+
+/* ------   ACCORDION   --------*/
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+.accordion::before {
+    position: relative;
+    content: "\002B \0020 \0020";
+    font-size: 15px;
+    font-weight: bold;
+}
+.accordion.active::before {
+    content: "\2212 \0020 \0020";
+    transition: transform 0.4s ;
+}
+.accordion:hover {
+    background-color: rgb(143, 181, 227);;
+}
+.panel {
+    padding: 0 12px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+} 
+
+
+
+
+
+/* ------   SCROLLBAR   -------- */
+
+.scroller {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    margin-top: 2px;
+  }
+
+
+
+
+
+
+
+
+
+/* ------   CHANGEMENT FOND DE CARTE   -------- */
+.WMSabsolutePosition {
+    position: absolute;
+    top: 20vh;
+    right: 1vw;
+    width: 90px;
+}
+
+
+
+
+
+
+/* ------   SLIDING BAR (ech. ellipses)   -------- */
+.slidecontainer {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    width: 360px;
+    text-align: center; 
+    background-color: white;
+    padding: 10px 5px 10px 5px;
+    box-shadow: 0px 0px 20px grey;
+  }
+  .slider {
+    -webkit-appearance: none;  
+    appearance: none;
+    width: 90%; 
+    height: 15px; 
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+  }
+  /* Mouse-over effects */
+  .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+  }
+  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 20px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: rgb(76,118,171); /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+  .slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #04AA6D; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+.textEchelle {
+    font-size: 15px;
+}
+
+
+
+
+
+
+/* ------   DIVERS   -------- */
+
+#map {
+    height: 100vh;
+    width: 100vw;
+}
+
+.boxPageWeb {
+    width: 100%;
+}
+
+.ol-zoom {
+    position: absolute;
+    top: 2vh;
+    left: 95.8vw;
+}
+
+.ol-control {
+    position: absolute;
+    background-color: rgb(236, 236, 236);
+    border-radius: 0px;
+    padding: 0px;
+}
+
+.ol-control button {
+    display: block;
+    margin: 0px;
+    padding: 0;
+    color: rgb(0, 0, 0);
+    font-weight: 900;
+    text-decoration: none;
+    font-size: 25px;
+    text-align: center;
+    height: 50px;
+    width: 50px;
+    line-height: .9em;
+    background-color: rgb(236, 236, 236);
+    border-color: rgb(0, 0, 0);
+    border-radius: 2px;
+}
+
+.importInfo {
+    color: rgb(8, 173, 16);
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 0px;
+}
+
+.greyBackground {
+    background-color:rgb(236, 236, 236);
+}
+
+.h5, h5 {
+    font-size: 15px;
+    margin: 5px 10px 5px 10px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+} 
+
+.absolutePosition {
+    position: absolute;
+    top: 0vh;
+    left: 0vw;
+}
+
+.boxMenu {
+    width: 350px;
+    background-color: white;
+    padding: 20px;
+    padding-top: 10px;
+    box-shadow: 0px 0px 20px grey;
+}
+
+.inputFile {
+    font-size: 12px;
+    width: 95%;
+    margin: 0px 0px 0px 0px;
+}
+
+p {
+    font-size: 15px;
+}
+
+.checkboxLabel {
+    font-size: 15px;
+}
+
+.NoPtsCheckbox {
+    font-size: 12px;
+    position: relative;
+    bottom: -5px;
+}
+
+.NoPtsTxt { 
+    font-size: 12px;
+    margin-left: 2px;
+}
+
+.NoPtsDecalage {
+    margin-left: 13px;
+    margin-bottom: 0px;
+    margin-top: -5px;
+}
+
+.textEchelleLegende {
+    padding-left: 30px;
+    margin-top: -2px;
+    font-size: 13px;
+}
+
+.legendeBarree {
+    color:rgb(109, 109, 109);
+    text-decoration: line-through; 
+}
+
+.legendeGrise {
+    color:rgb(145, 145, 145);
+}
+
+
+.fontColorFiab1 {
+    color: #FF1700
+}
+.fontColorFiab2 {
+    color: #FFD000
+}
+.fontColorFiab3 {
+    color: #ABFF00
+}
+.fontColorFiab4 {
+    color: #2AE100
+}
+
+.popover-body{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 13px;
+}
+
+.popUpTitre{
+    font-weight: bold;
+}
+
+hr {
+    margin-top: 6px;
+    margin-bottom: 0px;
+    color: inherit;
+    background-color: currentColor;
+    border: 0;
+    opacity: .25;
+}
+
+
+.creditHEIG {
+    position:absolute;
+    bottom: 1vh;
+    left: 1vw;
+    background-color: white;
+}
+
+
+

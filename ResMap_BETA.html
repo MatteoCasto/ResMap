@@ -244,9 +244,13 @@
       
   </div>
 
+  <div class="creditHEIG">
+    Matteo Casto © HEIG-VD 2022
+  </div>
+
 
   <div class="slidecontainer">
-    <input type="range" min="0" max="9999" step="100" value="1000" class="slider" id="myRange">
+    <input type="range" min="0" max="9999" step="10" value="1000" class="slider" id="myRange">
     <div>
       <span class="textEchelle">Echelle des ellipses, rectangles et vecteurs → </span>
       <span id="textEchelle" class="textEchelle"></span>
@@ -259,9 +263,15 @@
     <button class="accordion py-2"><img src="./img/mapWMS_MENU.png" width="50"></button>
     <div class="panel">
       <div>
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_CN" onchange="changeBackground()" checked>
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_CN" onchange="changeBackground()">
         <label class="form-check-label" for="cb_CN">
           CN
+        </label>
+      </div>
+      <div>
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="cb_MO" onchange="changeBackground()" checked>
+        <label class="form-check-label" for="cb_MO">
+          MO
         </label>
       </div>
       <div>
@@ -366,6 +376,21 @@
     opacity: 0.5
   });
 
+  // MO noir et blanc
+  const attributions_geodienste = [
+    "Fond de plan &copy; <a href=\"https://geodienste.ch\">geodienste</a>"
+  ];
+  const MO_nb = new ol.layer.Tile({
+    id: "background-layer",
+    source: new ol.source.TileWMS({
+      url: `https://geodienste.ch/db/av_0/fra?`,
+      params: { 'LAYERS': 'LCSF,LCSFPROJ,Conduites,SOLI,SOSF,SOPT,Adresses_des_batiments,Nomenclature,Biens_fonds,Biens_fonds_projetes,Limites_territoriales', 'TILED': true },
+      attributions: attributions_geodienste,
+    }),
+    zIndex: -99,
+    opacity: 0.5
+  });
+
   // Projection suisse
   const projection = new ol.proj.Projection({
     code: "EPSG:2056",
@@ -383,7 +408,7 @@
   const map = new ol.Map({
     target: "map",
     layers: [
-      carteNationale,
+      MO_nb,
     ],
     view,
     controls: ol.control.defaults({
@@ -417,7 +442,7 @@
         parser = new DOMParser();
         xmlDoc = parser.parseFromString(xmlToParse,"text/xml");
         let listAllPoints = parsingPointsXML(xmlToParse);
-
+        centerViewOnProject(listAllPoints);
         // CHANGER ECHELLE ELLIPSES ET RECTANGLES PAR DEFAULT CI-DESSSOUS 
         echelleEllipses = 1000.0
 
@@ -442,7 +467,6 @@
         map.removeLayer(directionLayer); //pour ordre d'affichage et gestion des animations
         map.removeLayer(distanceLayer); //pour ordre d'affichage et gestion des animations
         parsingViseesXML(xmlToParse);
-        centerViewOnProject(listAllPoints);
         document.getElementById("outputTest").textContent = "Import effectué ✓";
         
       };
