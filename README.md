@@ -1,5 +1,5 @@
 # ResMap
-Visualisateur web de réseaux géodésiques 2D issus de LTOP
+Visualisateur web de réseaux géodésiques 2D issus de LTOP réalisé dans le cadre du cours de SIG4 à l'HEIG-VD en 2022.
 L'utilisateur peut écrire toute suggestion/remarque à l'adresse: matteo.casto@outlook.com
 
 
