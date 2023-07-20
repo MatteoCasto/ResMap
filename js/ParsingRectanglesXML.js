@@ -30,7 +30,7 @@ function parsingRectanglesXML(xmlToParse) {
         let na = pointsList[i].getAttribute("na")/1000.0; // en [m]
         let nb = pointsList[i].getAttribute("nb")/1000.0; // en [m]
         center = [parseFloat(listAllPoints.get(pointName)[0]),parseFloat(listAllPoints.get(pointName)[1])]
-        allListAzimut.push([pointsList[i].getAttribute("azimuthN")/3.1415*180.0]) // en [rad]
+        allListAzimut.push([pointsList[i].getAttribute("azimuthN")*3.1415/200.0]) // en [rad]
         allListCenter.push([center[0],center[1]]);
         listNA.push([String((na*1000.0).toFixed(1)) + "mm"]); // Pour l'ajout du label
         
@@ -73,7 +73,7 @@ function parsingRectanglesXML(xmlToParse) {
         geometry: new ol.geom.LineString(coordArray_i),
         properties: listNA[i][0],
       })
-      featureRectangle.getGeometry().rotate(allListAzimut[i],allListCenter[i])   
+      featureRectangle.getGeometry().rotate(-allListAzimut[i],allListCenter[i])   
       rectanglesLineSource.addFeature(featureRectangle);
     };
 

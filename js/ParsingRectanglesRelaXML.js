@@ -38,7 +38,7 @@ function parsingRectanglesRelaXML(xmlToParse) {
         let coord2 = [parseFloat(listAllPoints.get(pointName2)[0]),parseFloat(listAllPoints.get(pointName2)[1])]
         allListP1P2.push([coord1,coord2]);
         let moyCenter = [parseFloat(((coord1[0]+coord2[0])/2).toFixed(3)), parseFloat(((coord1[1]+coord2[1])/2).toFixed(3))]
-        allListAzimut.push([rectRelaList[i].getAttribute("azimuthA")/3.1415*180.0]) // en [rad]
+        allListAzimut.push([rectRelaList[i].getAttribute("azimuthA")*3.1415/200.0]) // en [rad]
         allListCenters.push([moyCenter[0],moyCenter[1]]); // Centre moyen des 2 points
 
 
@@ -68,7 +68,7 @@ function parsingRectanglesRelaXML(xmlToParse) {
         geometry: new ol.geom.LineString(allListP1P2[i]),
       });
 
-      featureRectangle.getGeometry().rotate(allListAzimut[i],allListCenters[i]);
+      featureRectangle.getGeometry().rotate(-allListAzimut[i],allListCenters[i]);
       rectanglesRelaLineSource.addFeature(featureRectangle);
       rectanglesRelaLineSource.addFeature(featureLineP1P2);
       

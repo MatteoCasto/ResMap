@@ -61,7 +61,7 @@ function parsingEllipsesXML(xmlToParse) {
 
 
   // Initialisation des boucles pour création d'ellipses
-  let t = range(0, 390, 10);
+  let t = range(0, 410, 10);
   let allListENellipse = []
   let allListAzimut = []
   let allListCenter = []
@@ -75,12 +75,12 @@ function parsingEllipsesXML(xmlToParse) {
       listA.push([(a*1000.0*kSigma).toFixed(1)]);
       let b = pointsList[i].getAttribute("meanErrorB")/1000.0; // en [m]
       let center = [parseFloat(listAllPoints.get(pointName)[0]),parseFloat(listAllPoints.get(pointName)[1])]
-      allListAzimut.push([pointsList[i].getAttribute("azimuthA")/3.1415*180.0]) // en [rad]
+      allListAzimut.push([pointsList[i].getAttribute("azimuthA")*3.1415/200.0]) // en [rad]
       allListCenter.push([center[0],center[1]]);
       
       let listENellipse = []
-      t.forEach(gis => listENellipse.push( [parseFloat(a*kSigma*echelleEllipses*Math.cos(gis*3.1415/180.0)+center[0]),
-        parseFloat(b*kSigma*echelleEllipses*Math.sin(gis*3.1415/180.0)+center[1])]) )
+      t.forEach(gis => listENellipse.push( [parseFloat(a*kSigma*echelleEllipses*Math.cos(gis*3.1415/200.0)+center[0]),
+        parseFloat(b*kSigma*echelleEllipses*Math.sin(gis*3.1415/200.0)+center[1])]) )
       allListENellipse.push(listENellipse); // tableau de toutes les coordonnées de chaque ellipses (grand)
     };
 
@@ -98,7 +98,7 @@ function parsingEllipsesXML(xmlToParse) {
       geometry: new ol.geom.LineString(coordArray_i),
       properties: String(listA[i]) + "mm",
     })
-    featureEllipse.getGeometry().rotate(allListAzimut[i],allListCenter[i])   
+    featureEllipse.getGeometry().rotate(-allListAzimut[i]+Math.PI/2,allListCenter[i])   
     ellipsesLineSource.addFeature(featureEllipse);
   };
 
